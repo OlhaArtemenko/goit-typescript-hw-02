@@ -1,8 +1,14 @@
 import Modal from 'react-modal';
+import { Picture } from '../../types';
 
 Modal.setAppElement('#root');
 
-export default function ImageModal({ image, onClose }) {
+interface ImageModalProps {
+  image: Picture | null;
+  onClose: () => void;
+}
+
+export default function ImageModal({ image, onClose }: ImageModalProps) {
   return (
     <Modal
       isOpen={!!image}
@@ -31,7 +37,7 @@ export default function ImageModal({ image, onClose }) {
       }}
     >
       <div onClick={onClose}>
-        <img src={image.urls.regular} alt={image.alt_description} />
+        {image && <img src={image.urls.regular} alt={image.alt_description} />}
       </div>
     </Modal>
   );

@@ -1,21 +1,22 @@
 import { useEffect, useState } from 'react';
-import { getPictures } from '../../pictures-api.js';
-import SearchBar from '../SearchBar/SearchBar.jsx';
-import ImageGallery from '../ImageGallery/ImageGallery.jsx';
-import Loader from '../Loader/Loader.jsx';
-import ErrorMessage from '../ErrorMessage/ErrorMessage.jsx';
-import LoadMoreBtn from '../LoadMoreBtn/LoadMoreBtn.jsx';
-import ImageModal from '../ImageModal/ImageModal.jsx';
+import { getPictures } from '../../pictures-api';
+import SearchBar from '../SearchBar/SearchBar';
+import ImageGallery from '../ImageGallery/ImageGallery';
+import Loader from '../Loader/Loader';
+import ErrorMessage from '../ErrorMessage/ErrorMessage';
+import LoadMoreBtn from '../LoadMoreBtn/LoadMoreBtn';
+import ImageModal from '../ImageModal/ImageModal';
 import { Toaster } from 'react-hot-toast';
+import { Picture } from '../../types';
 
 export default function App() {
-  const [pictures, setPictures] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
-  const [page, setPage] = useState(1);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [modalImage, setModalImage] = useState(null);
-  const [perPage] = useState(12);
+  const [pictures, setPictures] = useState<Picture[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isError, setIsError] = useState<boolean>(false);
+  const [page, setPage] = useState<number>(1);
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [modalImage, setModalImage] = useState<Picture | null>(null);
+  const [perPage] = useState<number>(12);
 
   useEffect(() => {
     if (searchQuery.trim() === '') {
@@ -36,7 +37,7 @@ export default function App() {
     fetchPictures();
   }, [page, searchQuery, perPage]);
 
-  const handleSearch = topic => {
+  const handleSearch = (topic: string) => {
     setSearchQuery(topic);
     setPage(1);
     setPictures([]);
@@ -54,7 +55,7 @@ export default function App() {
         <ErrorMessage message="Oops! There was an error! Try again!" />
       )}
       <ImageGallery items={pictures} onImageClick={setModalImage} />
-      {isLoading && <Loader />}
+      <Loader isVisible={isLoading} />
       {pictures.length > 0 && !isLoading && (
         <LoadMoreBtn onClick={handleLoadMore} />
       )}
